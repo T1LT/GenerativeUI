@@ -356,15 +356,19 @@ Besides that, you can also chat with users and do some calculations if needed.`,
     //   </BotCard>
     // );
 
-      const res = await fetch("http://localhost:3000/api/f1/drivers");
-      const drivers = await res.json();
+    const fetchPrefix =
+      process.env.NODE_ENV === "production"
+        ? "https://generative-ui-pearl.vercel.app"
+        : "http://localhost:3000";
 
-      reply.done(
-        <BotCard>
-          <Drivers drivers={drivers} />
-        </BotCard>
-      );
+    const res = await fetch(`${fetchPrefix}/api/f1/drivers`);
+    const drivers = await res.json();
 
+    reply.done(
+      <BotCard>
+        <Drivers drivers={drivers} />
+      </BotCard>
+    );
   });
 
   return {

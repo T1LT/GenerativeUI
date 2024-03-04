@@ -107,7 +107,7 @@ async function submitUserMessage(content: string) {
   ]);
 
   const reply = createStreamableUI(
-    <BotMessage className="items-center">{spinner}</BotMessage>,
+    <BotMessage className="items-start">{spinner}</BotMessage>,
   );
 
   const completion = runOpenAICompletion(openai, {

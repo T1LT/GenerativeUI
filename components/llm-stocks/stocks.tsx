@@ -5,7 +5,7 @@ import { useActions, useUIState } from 'ai/rsc';
 import type { AI } from '../../app/action';
 
 export function Stocks({ stocks }: { stocks: any[] }) {
-  const [, setMessages] = useUIState<typeof AI>();
+  const [_, setMessages] = useUIState<typeof AI>();
   const { submitUserMessage } = useActions();
 
   return (

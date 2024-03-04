@@ -11,8 +11,8 @@ const exampleMessages = [
     message: "What's the stock price of AAPL?",
   },
   {
-    heading: "I'd like to buy 10 shares of MSFT",
-    message: "I'd like to buy 10 shares of MSFT",
+    heading: "Current drivers in F1?",
+    message: "Current drivers in F1?",
   },
 ];
 

@@ -13,7 +13,7 @@ export default function Drivers({ drivers }: { drivers: ParsedDriverData[] }) {
 
 function DriverCard({ driver }: { driver: ParsedDriverData }) {
   return (
-    <div className="w-full p-4 flex flex-col border rounded-md">
+    <div className="w-full p-4 flex flex-col border rounded-md shadow-sm">
       <div className="flex justify-between items-center">
         <div className="flex gap-1">
           <h1 className="text-xl">{driver.first_name.toUpperCase()}</h1>
@@ -21,13 +21,13 @@ function DriverCard({ driver }: { driver: ParsedDriverData }) {
             {driver.last_name.toUpperCase()}
           </h1>
         </div>
-        <span>{driver.country_code}</span>
+        <span className="text-sm">{driver.country_code}</span>
       </div>
       <h2 className={`text-[#${driver.team_colour}]`}>{driver.team_name}</h2>
       <div className="flex justify-between">
         <h1 className="font-black text-2xl">{driver.driver_number}</h1>
         <Avatar>
-          <AvatarImage className="bg-neutral-900" src={driver.headshot_url} />
+          <AvatarImage className="bg-neutral-200 dark:bg-neutral-900" src={driver.headshot_url} />
           <AvatarFallback>{`${driver.first_name[0]}${driver.last_name[0]}`}</AvatarFallback>
         </Avatar>
       </div>

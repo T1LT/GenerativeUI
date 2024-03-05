@@ -26,31 +26,37 @@ export default function Drivers({ drivers }: { drivers: ParsedDriverData[] }) {
 
 function DriverCard({ driver }: { driver: ParsedDriverData }) {
   return (
-    <div className="w-full p-4 flex flex-col border rounded-md shadow-sm">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-1">
-          <h1 className="text-xl">{driver.first_name.toUpperCase()}</h1>
-          <h1 className="text-xl font-bold">
-            {driver.last_name.toUpperCase()}
-          </h1>
+    <button className="text-left">
+      <div className="w-full p-4 flex flex-col border rounded-md shadow-sm hover:bg-zinc-100 hover:dark:bg-zinc-900 transition">
+        <div className="flex justify-between items-center">
+          <div className="flex gap-1">
+            <h1 className="text-xl">{driver.first_name.toUpperCase()}</h1>
+            <h1 className="text-xl font-bold">
+              {driver.last_name.toUpperCase()}
+            </h1>
+          </div>
+          <span className="text-sm">{driver.country_code}</span>
         </div>
-        <span className="text-sm">{driver.country_code}</span>
+        <h2
+          className={`${TEAM_COLORS[driver.team_name]} font-semibold text-sm`}
+        >
+          {driver.team_name}
+        </h2>
+        <div className="flex justify-between">
+          <h1
+            className={`${TEAM_COLORS[driver.team_name]} font-black text-2xl`}
+          >
+            {driver.driver_number}
+          </h1>
+          <Avatar>
+            <AvatarImage
+              className="bg-neutral-200 dark:bg-neutral-900"
+              src={driver.headshot_url}
+            />
+            <AvatarFallback>{`${driver.first_name[0]}${driver.last_name[0]}`}</AvatarFallback>
+          </Avatar>
+        </div>
       </div>
-      <h2 className={`${TEAM_COLORS[driver.team_name]} font-semibold text-sm`}>
-        {driver.team_name}
-      </h2>
-      <div className="flex justify-between">
-        <h1 className={`${TEAM_COLORS[driver.team_name]} font-black text-2xl`}>
-          {driver.driver_number}
-        </h1>
-        <Avatar>
-          <AvatarImage
-            className="bg-neutral-200 dark:bg-neutral-900"
-            src={driver.headshot_url}
-          />
-          <AvatarFallback>{`${driver.first_name[0]}${driver.last_name[0]}`}</AvatarFallback>
-        </Avatar>
-      </div>
-    </div>
+    </button>
   );
 }

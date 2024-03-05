@@ -368,15 +368,15 @@ Besides that, you can also chat with users and do some calculations if needed.`,
         <Drivers drivers={drivers} />
       </BotCard>
     );
-    
+
     aiState.done([
-        ...aiState.get(),
-        {
-          role: "function",
-          name: "get_drivers",
-          content: `[UI showing the current F1 drivers on the grid]`,
-        },
-      ]);
+      ...aiState.get(),
+      {
+        role: "function",
+        name: "get_drivers",
+        content: `[UI showing the current F1 drivers on the grid]`,
+      },
+    ]);
   });
 
   return {

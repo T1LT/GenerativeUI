@@ -1,5 +1,9 @@
+"use client";
+
 import { ParsedDriverData } from "@/lib/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useActions, useUIState } from "ai/rsc";
+import { AI } from "@/app/action";
 
 const TEAM_COLORS: { [key: string]: string } = {
   "Red Bull Racing": "text-[#3671c6]",
@@ -25,8 +29,19 @@ export default function Drivers({ drivers }: { drivers: ParsedDriverData[] }) {
 }
 
 function DriverCard({ driver }: { driver: ParsedDriverData }) {
+  const [_, setMessages] = useUIState<typeof AI>();
+  const { submitUserMessage } = useActions();
+
   return (
-    <button className="text-left">
+    <button
+      className="text-left"
+      onClick={async () => {
+        const response = await submitUserMessage(
+          `Show info on driver with driver_number ${driver.driver_number}`
+        );
+        setMessages((currentMessages) => [...currentMessages, response]);
+      }}
+    >
       <div className="w-full p-4 flex flex-col border rounded-md shadow-sm hover:bg-zinc-100 hover:dark:bg-zinc-900 transition">
         <div className="flex justify-between items-center">
           <div className="flex gap-1">
@@ -35,7 +50,7 @@ function DriverCard({ driver }: { driver: ParsedDriverData }) {
               {driver.last_name.toUpperCase()}
             </h1>
           </div>
-          <span className="text-sm">{driver.country_code}</span>
+          <span className="text-xs text-zinc-200">{driver.country_code}</span>
         </div>
         <h2
           className={`${TEAM_COLORS[driver.team_name]} font-semibold text-sm`}

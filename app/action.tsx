@@ -25,11 +25,19 @@ import { StockSkeleton } from "@/components/llm-stocks/stock-skeleton";
 import { EventsSkeleton } from "@/components/llm-stocks/events-skeleton";
 import { StocksSkeleton } from "@/components/llm-stocks/stocks-skeleton";
 import Drivers from "@/components/f1-data/drivers";
-import DriversSkeleton from "@/components/f1-data/drivers-skeleton";
+import DriversSkeleton, {
+  DriverShowSkeleton,
+} from "@/components/f1-data/drivers-skeleton";
+import DriverShow from "@/components/f1-data/driver-show";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
 });
+
+const fetchPrefix =
+  process.env.NODE_ENV === "production"
+    ? "https://generative-ui-pearl.vercel.app"
+    : "http://localhost:3000";
 
 async function confirmPurchase(symbol: string, price: number, amount: number) {
   "use server";
@@ -124,7 +132,7 @@ async function submitUserMessage(content: string) {
 You are a stock trading conversation bot and you can help users buy stocks, step by step.
 You and the user can discuss stock prices and the user can adjust the amount of stocks they want to buy, or place an order, in the UI.
 
-You also have the ability to get F1 data such as the list of current drivers on the grid.
+You also have the ability to get F1 data such as the list of current drivers on the grid. You can also display data on a single driver if requested.
 
 Messages inside [] means that it's a UI element or a user event. For example:
 - "[Price of AAPL = 100]" means that an interface of the stock price of AAPL is shown to the user.
@@ -135,6 +143,7 @@ If the user just wants the price, call \`show_stock_price\` to show the price.
 If you want to show trending stocks, call \`list_stocks\`.
 If you want to show events, call \`get_events\`.
 If you want to get the list of current F1 drivers on the grid, call \`get_drivers\`.
+If you want to show info on one particular driver, call \`show_driver\`.
 If the user wants to sell stock, or complete another impossible task, respond that you are a demo and cannot do that.
 
 Besides that, you can also chat with users and do some calculations if needed.`,
@@ -211,6 +220,17 @@ Besides that, you can also chat with users and do some calculations if needed.`,
         name: "get_drivers",
         description: "Get a list of all the current F1 drivers on the grid.",
         parameters: z.object({ nothing: z.string().optional() }),
+      },
+      {
+        name: "show_driver",
+        description: "Use this to show info on one particular F1 driver.",
+        parameters: z.object({
+          driver_number: z
+            .number()
+            .describe(
+              "The driver number of the F1 driver the user wants info on"
+            ),
+        }),
       },
     ],
     temperature: 0,
@@ -355,11 +375,6 @@ Besides that, you can also chat with users and do some calculations if needed.`,
       </BotCard>
     );
 
-    const fetchPrefix =
-      process.env.NODE_ENV === "production"
-        ? "https://generative-ui-pearl.vercel.app"
-        : "http://localhost:3000";
-
     const res = await fetch(`${fetchPrefix}/api/f1/drivers`);
     const drivers = await res.json();
 
@@ -375,6 +390,35 @@ Besides that, you can also chat with users and do some calculations if needed.`,
         role: "function",
         name: "get_drivers",
         content: `[UI showing the current F1 drivers on the grid]`,
+      },
+    ]);
+  });
+
+  completion.onFunctionCall("show_driver", async (driver_number) => {
+    reply.update(
+      <BotCard>
+        <DriverShowSkeleton />
+      </BotCard>
+    );
+
+    const res = await fetch(`${fetchPrefix}/api/f1/drivershow`, {
+      method: "POST",
+      body: JSON.stringify(driver_number),
+    });
+    const driver = await res.json();
+
+    reply.done(
+      <BotCard>
+        <DriverShow driver={driver} />
+      </BotCard>
+    );
+
+    aiState.done([
+      ...aiState.get(),
+      {
+        role: "function",
+        name: "show_driver",
+        content: `[UI showing info on the driver: ${driver}]`,
       },
     ]);
   });

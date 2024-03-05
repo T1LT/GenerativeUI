@@ -14,7 +14,7 @@ function DriverCardSkeleton() {
       <div className="flex justify-between items-center">
         <div className="flex gap-1">
           <h1 className="text-xl text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md mb-1 animate-pulse">
-            {"XXXXXXXXXXXXXX"}
+            {"XXXXXXXXXXXXXXXXX"}
           </h1>
         </div>
         <span className="text-sm text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md mb-1 animate-pulse">
@@ -33,6 +33,37 @@ function DriverCardSkeleton() {
           {"XX"}
         </h1>
         <div className="bg-zinc-200 dark:bg-zinc-800 w-10 h-10 rounded-full animate-pulse"></div>
+      </div>
+    </div>
+  );
+}
+
+export function DriverShowSkeleton() {
+  return (
+    <div className="w-full border rounded-md shadow-sm">
+      <div className="flex justify-start">
+        <div className="p-6">
+          <div className="flex items-center">
+            <div className="flex items-center gap-1">
+              <h1 className="text-xl text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md mb-1 animate-pulse">
+                {"XXXXXXXXXXXXXXXXX"}
+              </h1>
+              <span className="text-[10px] text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md mb-1 animate-pulse">
+                {"XXX"}
+              </span>
+            </div>
+          </div>
+          <h2
+            className={`font-semibold text-sm text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md mb-1 animate-pulse`}
+          >
+            {"XXXXXXXXXXXXXXX"}
+          </h2>
+          <h1
+            className={`font-black text-2xl text-transparent w-fit bg-zinc-200 dark:bg-zinc-800 rounded-md animate-pulse`}
+          >
+            {"XX"}
+          </h1>
+        </div>
       </div>
     </div>
   );

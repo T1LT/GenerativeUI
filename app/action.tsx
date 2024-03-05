@@ -25,7 +25,7 @@ import { StockSkeleton } from "@/components/llm-stocks/stock-skeleton";
 import { EventsSkeleton } from "@/components/llm-stocks/events-skeleton";
 import { StocksSkeleton } from "@/components/llm-stocks/stocks-skeleton";
 import Drivers from "@/components/f1-data/drivers";
-import { RawDriverData } from "@/lib/types";
+import DriversSkeleton from "@/components/f1-data/drivers-skeleton";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -349,12 +349,11 @@ Besides that, you can also chat with users and do some calculations if needed.`,
   );
 
   completion.onFunctionCall("get_drivers", async () => {
-    // TODO: add drivers card skeleton
-    // reply.update(
-    //   <BotCard>
-    //     <DriversSkeleton />
-    //   </BotCard>
-    // );
+    reply.update(
+      <BotCard>
+        <DriversSkeleton />
+      </BotCard>
+    );
 
     const fetchPrefix =
       process.env.NODE_ENV === "production"
@@ -369,6 +368,15 @@ Besides that, you can also chat with users and do some calculations if needed.`,
         <Drivers drivers={drivers} />
       </BotCard>
     );
+    
+    aiState.done([
+        ...aiState.get(),
+        {
+          role: "function",
+          name: "get_drivers",
+          content: `[UI showing the current F1 drivers on the grid]`,
+        },
+      ]);
   });
 
   return {
